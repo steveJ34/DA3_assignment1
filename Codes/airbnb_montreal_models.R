@@ -32,7 +32,7 @@ setwd("/Users/steve_j/Documents/CEU /data_analysis/DA_3/assignment_1")
 source("ch00-tech-prep/theme_bg.R")
 source("ch00-tech-prep/da_helper_functions.R")
 
-use_case_dir <- "regression/"
+use_case_dir <- "analysis/"
 
 # data used
 data_in <- use_case_dir
@@ -98,7 +98,7 @@ data <- data %>%
     ln_review_scores_rating=ifelse(is.na(ln_review_scores_rating),0, ln_review_scores_rating),
   )
 
-# 3. drop columns when many missing not important
+# 3. drop columns when many missing and not important
 to_drop <- c("p_host_response_rate")
 data <- data %>%
   select(-one_of(to_drop))
@@ -107,7 +107,7 @@ to_filter <- sapply(data, function(x) sum(is.na(x)))
 to_filter[to_filter > 0]
 
 
-# 4. Replace missing variables re reviews with zero, when no review + add flags
+# 4. Replace missing variables reviews with zero, if no review and add flags
 data <- data %>%
   mutate(
     flag_days_since=ifelse(is.na(n_days_since),1, 0),
@@ -130,7 +130,7 @@ count_missing_values(data)
 ###################################
 
 # Decision
-# Size, we need a normal apartment, 1-7persons, below 500 USD
+# Size, we need a normal apartment, 2 to 6 ersons, below 500 USD
 data <- data %>%
   filter(1 < n_accommodates, n_accommodates <7,
          price <= 500)
@@ -174,7 +174,7 @@ data %>%
 Hmisc::describe(data$price)
 
 # NB all graphs, we exclude  extreme values of price
-datau <- subset(data, price<400)
+datau <- subset(data, price<500)
 
 
 # Distribution of price by type below 400
